@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb10842ea75e5a5b489a353099b3e620a
+class ComposerStaticInit377490bc45b606168cd4d40d86b8e20c
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -37,6 +37,10 @@ class ComposerStaticInitb10842ea75e5a5b489a353099b3e620a
         'F' => 
         array (
             'FastRoute\\' => 10,
+        ),
+        'D' => 
+        array (
+            'Doctrine\\Common\\Inflector\\' => 26,
         ),
         'C' => 
         array (
@@ -93,6 +97,10 @@ class ComposerStaticInitb10842ea75e5a5b489a353099b3e620a
         array (
             0 => __DIR__ . '/..' . '/nikic/fast-route/src',
         ),
+        'Doctrine\\Common\\Inflector\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
+        ),
         'Carbon\\' => 
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
@@ -107,21 +115,14 @@ class ComposerStaticInitb10842ea75e5a5b489a353099b3e620a
                 0 => __DIR__ . '/..' . '/pimple/pimple/src',
             ),
         ),
-        'D' => 
-        array (
-            'Doctrine\\Common\\Inflector\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/doctrine/inflector/lib',
-            ),
-        ),
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb10842ea75e5a5b489a353099b3e620a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb10842ea75e5a5b489a353099b3e620a::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitb10842ea75e5a5b489a353099b3e620a::$prefixesPsr0;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit377490bc45b606168cd4d40d86b8e20c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit377490bc45b606168cd4d40d86b8e20c::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit377490bc45b606168cd4d40d86b8e20c::$prefixesPsr0;
 
         }, null, ClassLoader::class);
     }
