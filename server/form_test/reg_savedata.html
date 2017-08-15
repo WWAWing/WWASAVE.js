@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SAVE登録テスト</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        $("#response").html("Response Values");
+
+        $("#button").click( function(){
+            var url = $("#url_post").val();
+
+                var JSONdata = {
+					id: $("#id").val(),
+                    user_id: $("#user_id").val(),
+                    token: $("#token").val(),
+                    id: $("#id").val(),
+                    hp: $("#hp").val(),
+                    at: $("#at").val(),
+                    df: $("#df").val(),
+                    money: $("#money").val(),
+                    player_x: $("#player_x").val(),
+                    player_y: $("#player_y").val(),
+                    long_password: $("#long_password").val(),
+                    comment: $("#comment").val(),
+                    
+                };
+
+            // alert(JSON.stringify(JSONdata));
+
+            $.ajax({
+                type : 'post',
+                url : url,
+                data : JSON.stringify(JSONdata),
+                contentType: 'application/JSON',
+                dataType : 'JSON',
+                scriptCharset: 'utf-8',
+                success : function(data) {
+                    $("#response").html(JSON.stringify(data));
+                },
+                error : function(data) {
+                    $("#response").html(JSON.stringify(data));
+                }
+            });
+        })
+    })
+</script>
+
+</head>
+<body>
+    <h1>SAVE登録テスト</h1>
+    <p>URL: <input type="text" id="url_post" name="url" size="100" value="../index.php/save_reg/"></p>
+    <p>id: <input type="text" id="id" size="30" value="1"></p>
+    <p>user_id: <input type="text" id="user_id" size="30" value="a"></p>
+    <p>token: <input type="text" id="token" size="30" value="7070f54639e6429c5c20c026cfe5cea58b168bd4af35b0002868d0a956e9c36b773ecfbcc3b14a25fa14cb39694d070d6daa94831deab08992b5fabfedcc5c287284b6adfdf0272b42e9b9ecf6c28fa4e26d1550e1b85bf0b0c45e88ccd4156e9d233ab207ca5633823139fcf06adea24703bfdcab5a39b7fe5cfedff5ed115fe5744519064ed6c21c5a6600b6b8a43c7d602e37466e7049cb47685b3e614ef9913ffecf10421f988c07106908b98a70d5f923290a65ac4083f21740b9f51c371750f051f46015a56c5c31c7d3dc5b6e1dcab5de039082fa03d6e63c8291f230110564b62a14c056614f141d9c4d394cabcbb0ae184d460f39b1cc65d2b580
+"></p>
+    <p>hp: <input type="text" id="hp" size="30" value="10000"></p>
+    <p>at: <input type="text" id="at" size="30" value="30"></p>
+    <p>df: <input type="text" id="df" size="30" value="20"></p>
+    <p>money: <input type="text" id="money" size="30" value="100"></p>
+    <p>player_x: <input type="text" id="player_x" size="30" value="10"></p>
+    <p>player_y: <input type="text" id="player_y" size="30" value="20"></p>
+    <p>long_password: <input type="text" id="long_password" size="30" value="aaaaaaaa"></p>
+    <p>comment: <input type="text" id="comment" size="30" value="テスト"></p>
+    <p><button id="button" type="button">submit</button></p>
+    <textarea id="response" cols=120 rows=10 disabled></textarea>
+    <p><a href="index.html">戻る</a></p>
+</body>
+</html>

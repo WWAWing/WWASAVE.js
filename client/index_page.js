@@ -2,6 +2,59 @@
 	"use strict";
 	let now_id = "";
 	let now_token = "";
+	// 右側のセーブリストを表示するためのもの
+	function show_save_list(){
+		console.log("ログイン済");
+		console.log("ID:"+now_id);
+		console.log("token:"+now_token);
+		$("#save_list").html("");
+		$("#save_list").append("ID:"+now_id+"でログインしています。<br>");
+		// save listを取得
+		$.ajax({
+			url: '../server/index.php/save_list_get/',
+			type: 'GET',
+			headers: {
+				'id': now_id,
+				'token': now_token
+			},
+		}).done((data)=>{
+			console.log(data);
+			// セーブデータ一覧を出力
+			let output_table = "<table  border='1'><tr><th>ID</th><th>hp</th><th>at</th><th>df</th><th>money</th><th>time</th><th>comment</th></tr>";
+			for(let i=0; i<data.length; i++){
+				output_table += "<tr>";
+				output_table += "<td>"+(i+1)+"</td>";
+				output_table += "<td>"+data[i]["hp"]+"</td>";
+				output_table += "<td>"+data[i]["at"]+"</td>";
+				output_table += "<td>"+data[i]["df"]+"</td>";
+				output_table += "<td>"+data[i]["money"]+"</td>";
+				output_table += "<td>"+data[i]["save_time"]+"</td>";
+				output_table += "<td>"+data[i]["comment"]+"</td>";
+				output_table += "</tr>";
+			}
+			output_table += "</table>";
+			output_table += "<hr>";
+			output_table += "<h2>セーブデータ選択</h2>";
+			output_table += '<select name="select_savedata" size="1">';
+			for(let i=0; i<data.length; i++){
+				output_table += '<option value="'+data[i]["id"]+'">'+(i+1)+'</option>';
+			}
+			output_table += '</select>';
+			output_table += '<button id="submit_savedata_id">選択</button>';
+			
+			$("#save_list").append(output_table);
+		}).fail((xhr)=>{
+			$("#save_list").append("エラーが発生しました。<br>");
+		});
+	}
+	// ウェブストレージをチェック
+	window.onload = ()=>{
+		now_id = window.localStorage.getItem('wwasave_id');
+		now_token = window.localStorage.getItem('wwasave_token');
+		if(now_id && now_token){
+			show_save_list();
+		}
+	}
 	// ログイン
 	$(document).on("click","#submit_login",()=>{
 		let submit_id = $('#login_user_id').val();
@@ -14,11 +67,16 @@
 				password: submit_password
 			}
 		}).done((data)=>{
+			// ログイン成功
 			now_id = submit_id;
 			now_token = data.token;
 			$("#create_user_result").html("");
 			$("#create_user_result").append(now_id+"でログインしました。");
+			window.localStorage.setItem('wwasave_id', submit_id);
+			window.localStorage.setItem('wwasave_token', data.token);
+			show_save_list();
 		}).fail((xhr)=>{
+			// ログイン失敗
 			$("#create_user_result").html("");
 			let output_str = "";
 			switch(xhr.status){
@@ -104,8 +162,15 @@
 			$("#create_user_result").append(output_str);
 		});
 	});
-	$(document).on("click","#now_token",()=>{
+	// ログアウト
+	$(document).on("click","#logout",()=>{
+		now_id = "";
+		now_token = "";
 		$("#create_user_result").html("");
-		$("#create_user_result").append("ID:"+now_id+"<br>token:"+now_token);
+		$("#create_user_result").append("ログアウトしました。");
+		$("#save_list").html("");
+		window.localStorage.removeItem('wwasave_id');
+		window.localStorage.removeItem('wwasave_token');
+		// TODO : '../server/index.php/logout/' にアクセスしてトークンを失効
 	});
 })();

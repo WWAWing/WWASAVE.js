@@ -10,3 +10,13 @@ table{
 .red{
 	color: #ff0000;
 }
+footer#copyright {
+    text-align: center;
+}
+#left_box{
+	float: left;
+	width: 25%;
+}
+#right_box{
+	float: rigth;
+}

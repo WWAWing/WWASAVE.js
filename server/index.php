@@ -20,6 +20,34 @@ function sha512_hash(string $pass):string {
 function sha512_hmac(int $id, string $token):string {
 	return hash_hmac("sha512", $token, (string)$id);
 }
+/*
+ * HTTPリクエストヘッダの中に指定されたリクエストがあるかを確認
+ * あるならbodyが返り、なければnullが帰る
+ */
+function get_http_request_header(array $headers, string $header_name) {
+    $get_token = null;
+    foreach ($headers as $name => $values) {
+        if( strcmp($name, $header_name) === 0 ){
+            $get_token = $values;
+            break;
+        }
+    }
+    return $get_token;
+}
+
+// IDとtokenが一致しているかチェック
+function token_check(string $id, string $token){
+	// DB情報取得
+	require './conf/dbconfig.php';
+	$user = $capsule::table('user')->where('id', '=', $id)->get();
+	if( count($user) === 0 ){
+		return false;
+	}
+	if( $user['0']->token !== $token ){
+		return false;
+	}
+	return true;
+}
 
 $app->get('/',function(){
 	
@@ -137,8 +165,117 @@ $app->post('/login/',function(Request $request, Response $response){
 // TODO : ワンタイムトークンを更新する
 
 // セーブ
+$app->post('/save_reg/',function(Request $request, Response $response){
+	// DB情報取得
+	require './conf/dbconfig.php';
+	// Content-type:application/json指定
+	$response = $response->withHeader('Content-type', 'application/json');
+	// 送信チェックリスト
+	$registrations =  $request->getParsedBody();
+	$check_list = array('user_id', 'token', 'hp', 'at', 'df', 'money', 'player_x', 'player_y', 'long_password', 'comment');
+	try{
+		for($i=0; $i<count( $check_list ); $i++){
+			if( !array_key_exists($check_list[$i], $registrations) ){
+				throw new Exception($check_list[$i]." is nothing", 1);
+			}
+		}
+		// tokenチェック
+        if( !token_check($registrations["user_id"], $registrations["token"]) ){
+			throw new Exception("token is wrong", 2);
+		}
+		// IDがあるかどうかをチェック
+		if(array_key_exists('id', $registrations)){
+			// update
+			// TODO : fillメソッドを使って書き直す
+			$capsule::table('savedata')->where([
+				['id', '=', $registrations["id"] ]
+			])->update([
+				'user_id' => $registrations["user_id"],
+				'hp' => $registrations["hp"],
+				'at' => $registrations["at"],
+				'df' => $registrations["df"],
+				'money' => $registrations["money"],
+				'player_x' => $registrations["player_x"],
+				'player_y' => $registrations["player_y"],
+				'long_password' => $registrations["long_password"],
+				'comment' => $registrations["comment"],
+				'save_time' => new DateTime()
+			]);
+		}
+		else{
+			// insert
+			$capsule::table('savedata')->insert([
+				'user_id' => $registrations["user_id"],
+				'hp' => $registrations["hp"],
+				'at' => $registrations["at"],
+				'df' => $registrations["df"],
+				'money' => $registrations["money"],
+				'player_x' => $registrations["player_x"],
+				'player_y' => $registrations["player_y"],
+				'long_password' => $registrations["long_password"],
+				'comment' => $registrations["comment"],
+				'save_time' => new DateTime()
+				
+			]);
+		}
+		// response
+		$res = array(
+			"message" => "Successfully saved"
+		);
+		$res_json = json_encode($res);
+		$response->getBody()->write( $res_json );
+	} catch(Exception $e){
+		// 400を返す
+		$response = $response->withStatus(400);
+		$res = array(
+			"code" => $e->getCode(),
+			"message" => $e->getMessage(),
+		);
+		$res_json = json_encode($res);
+		$response->getBody()->write( $res_json );
+	}
+	return $response;
+});
 
 // ロード
+
+// 全ロード(ロングパスワードは取得しない)
+$app->get('/save_list_get/',function(Request $request, Response $response){
+	// DB情報取得
+	require './conf/dbconfig.php';
+	// Content-type:application/json指定
+	$response = $response->withHeader('Content-type', 'application/json');
+	// Request Headerを取得
+	$headers = $request->getHeaders();
+	// idを取得
+	$get_id = get_http_request_header($headers,"HTTP_ID");
+	// tokenを取得
+    $get_token = get_http_request_header($headers,"HTTP_TOKEN");
+	try{
+		// HTTPリクエストヘッダにTOKENがあるかをチェック
+        if( empty( $get_token['0'] ) || empty( $get_id['0'] ) ){
+            throw new Exception("token or id is noting", 1);
+        }
+        // tokenチェック
+        if( !token_check($get_id['0'], $get_token['0']) ){
+			throw new Exception("token is wrong", 2);
+		}
+		// 全セーブデータ取得
+		$all_save_data = $capsule::table('savedata')->where('user_id', '=', $get_id['0'])->get();
+		$res_json = json_encode($all_save_data);
+		$response->getBody()->write( $res_json );
+	} catch(Exception $e){
+		// 400を返す
+		$response = $response->withStatus(400);
+		$res = array(
+			"code" => $e->getCode(),
+			"message" => $e->getMessage(),
+		);
+		$res_json = json_encode($res);
+		$response->getBody()->write( $res_json );
+	}
+	return $response;
+});
 
 // セーブ削除
 
