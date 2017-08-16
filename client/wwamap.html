@@ -1,35 +1,67 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Cache-Control" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <title>World Wide Adventure Wing</title>
-    <link rel="stylesheet" href="style.css" type="text/css" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<title>World Wide Adventure Wing SAVE</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
 
-    <!--  WWA requirements-->
-    <link rel="stylesheet" href="wwa.css" type="text/css" />
-    <script src="audio/audio.min.js"></script>
-    <script src="wwa.js"></script>
-    <!-- /WWA requirements -->
-
+	<!--  WWA requirements-->
+	<link rel="stylesheet" href="wwa.css" type="text/css" />
+	<script src="audio/audio.min.js"></script>
+	<script src="wwa.js"></script>
+	<!-- /WWA requirements -->
+	
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="wwasave_load.js"></script>
+	
 </head>
 <body>
-    <div id="wrapper">
-        <!-- WWA -->
-        <div id="wwa-wrapper" class="wwa-size-box"
-             data-wwa-mapdata="wwamap.dat"
-             data-wwa-loader="wwaload.js"
-             data-wwa-urlgate-enable="true"
-             data-wwa-title-img="cover.gif">
-        </div>
-        <!-- /WWA -->
-    </div>
-    <footer id="copyright">
-        <p> Internet RPG &quot;<a href="http://www.wwajp.com" class="wwa-copyright">World Wide Adventure</a>&quot; &copy;1996-2015 NAO</p>
-        <p> &quot;<a href="http://wwawing.com/" class="wwa-copyright">WWA Wing</a>&quot; &copy;2013-2015 WWA Wing Team</p>
-    </footer>
+	<!-- info savedata -->
+	<table border="1" class="center_table">
+		<tr>
+			<td>USER ID：</td>
+			<td><div id="user_id"></div></td>
+		</tr>
+		<tr>
+			<td>選択中のセーブID：</td>
+			<td><div id="save_id"></div></td>
+		</tr>
+		<tr><td>hp</td><td id="status_hp"></td></tr>
+		<tr><td>at</td><td id="status_at"></td></tr>
+		<tr><td>df</td><td id="status_df"></td></tr>
+		<tr><td>money</td><td id="status_money"></td></tr>
+		<tr><td>time</td><td id="status_time"></td></tr>
+		<tr><td>comment</td><td id="status_comment"></td></tr>
+	</table>
+	<br>
+	<hr>
+	<div id="wrapper">
+		<!-- WWA -->
+		<div id="wwa-wrapper" class="wwa-size-box"
+			 data-wwa-mapdata="wwamap.dat"
+			 data-wwa-loader="wwaload.js"
+			 data-wwa-urlgate-enable="true"
+			 data-wwa-title-img="cover.gif">
+		</div>
+		<!-- /WWA -->
+	</div>
+	<footer id="copyright">
+		<p> Internet RPG &quot;<a href="http://www.wwajp.com" class="wwa-copyright">World Wide Adventure</a>&quot; &copy;1996-2015 NAO</p>
+		<p> &quot;<a href="http://wwawing.com/" class="wwa-copyright">WWA Wing</a>&quot; &copy;2013-2015 WWA Wing Team</p>
+		<hr>
+		<a href="./index.html">ログイン画面に戻る</a>
+		<hr>
+		<h3>パスワード情報</h3>
+		<textarea id="password_save" rows="4" cols="40"></textarea><br>
+		<h3>パスワードコメント</h3>
+		<textarea id="save_comment" rows="3" cols="40"></textarea><br>
+		<button id="savedata_load">LOAD</button>
+		<button id="savedata_save">SAVE</button>
+		<div id="password_save_info"></div><br>
+	</footer>
 </body>
 </html>
 

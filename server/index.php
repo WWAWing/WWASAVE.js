@@ -238,6 +238,44 @@ $app->post('/save_reg/',function(Request $request, Response $response){
 });
 
 // ロード
+$app->get('/save_get/{save_id}/',function(Request $request, Response $response){
+	// save idを取得
+	$save_id = (int)$request->getAttribute('save_id');
+	// DB情報取得
+	require './conf/dbconfig.php';
+	// Content-type:application/json指定
+	$response = $response->withHeader('Content-type', 'application/json');
+	// Request Headerを取得
+	$headers = $request->getHeaders();
+	// idを取得
+	$get_id = get_http_request_header($headers,"HTTP_ID");
+	// tokenを取得
+    $get_token = get_http_request_header($headers,"HTTP_TOKEN");
+	try{
+		// HTTPリクエストヘッダにTOKENがあるかをチェック
+        if( empty( $get_token['0'] ) || empty( $get_id['0'] ) ){
+            throw new Exception("token or id is noting", 1);
+        }
+        // tokenチェック
+        if( !token_check($get_id['0'], $get_token['0']) ){
+			throw new Exception("token is wrong", 2);
+		}
+		// 指定したセーブデータ取得
+		$save_data = $capsule::table('savedata')->where('id', '=', $save_id)->get();
+		$res_json = json_encode($save_data["0"]);
+		$response->getBody()->write( $res_json );
+	} catch(Exception $e){
+		// 400を返す
+		$response = $response->withStatus(400);
+		$res = array(
+			"code" => $e->getCode(),
+			"message" => $e->getMessage(),
+		);
+		$res_json = json_encode($res);
+		$response->getBody()->write( $res_json );
+	}
+	return $response;
+});
 
 // 全ロード(ロングパスワードは取得しない)
 $app->get('/save_list_get/',function(Request $request, Response $response){
