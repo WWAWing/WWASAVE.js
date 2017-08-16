@@ -1,0 +1,7 @@
+wwa_main.ts
+140行付近
+wwasave用変数
+
+2600行付近
+_quickSave();
+

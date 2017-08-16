@@ -1,5 +1,6 @@
 (()=>{
 	"use strict";
+	/*
 	// user id
 	let now_id = "";
 	let now_token = "";
@@ -153,4 +154,5 @@
 	$(document).on("click","#savedata_save",()=>{
 		save_savedata();
 	});
+	*/
 })();
