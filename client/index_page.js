@@ -40,7 +40,8 @@
 				output_table += '<option value="'+data[i]["id"]+'">'+(i+1)+'</option>';
 			}
 			output_table += '</select>';
-			output_table += '<button id="submit_savedata_id">選択</button>';
+			output_table += '<button id="submit_savedata_id">選択</button><br>';
+			output_table += '<button id="submit_newgame">NEW GAME<button>';
 			$("#save_list").append(output_table);
 		}).fail((xhr)=>{
 			$("#save_list").append("エラーが発生しました。<br>");
@@ -59,6 +60,12 @@
 		// 選択中のセーブデータIDをローカルストレージへ保存
 		let select_sevedata_id = $("#select_savedata").val();
 		window.localStorage.setItem('wwasave_savedata_id', select_sevedata_id);
+		// ページ遷移
+		window.location.href = "./wwamap.html";
+	});
+	// NEW GAMEで開始
+	$(document).on("click","#submit_newgame",()=>{
+		window.localStorage.setItem('wwasave_savedata_id', -1);
 		// ページ遷移
 		window.location.href = "./wwamap.html";
 	});
