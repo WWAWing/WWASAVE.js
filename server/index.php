@@ -183,8 +183,10 @@ $app->post('/save_reg/',function(Request $request, Response $response){
         if( !token_check($registrations["user_id"], $registrations["token"]) ){
 			throw new Exception("token is wrong", 2);
 		}
+		$now_save_id = -1;
 		// IDがあるかどうかをチェック
 		if(array_key_exists('id', $registrations)){
+			$now_save_id = $registrations["id"];
 			// update
 			// TODO : fillメソッドを使って書き直す
 			$capsule::table('savedata')->where([
@@ -217,10 +219,12 @@ $app->post('/save_reg/',function(Request $request, Response $response){
 				'save_time' => new DateTime()
 				
 			]);
+			$now_save_id = $capsule::table('savedata')->count();
 		}
 		// response
 		$res = array(
-			"message" => "Successfully saved"
+			"message" => "Successfully saved",
+			"save_id" => $now_save_id
 		);
 		$res_json = json_encode($res);
 		$response->getBody()->write( $res_json );

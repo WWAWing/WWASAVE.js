@@ -75,6 +75,7 @@
 			// 成功
 			$("#password_save_info").html("");
 			$("#password_save_info").html("セーブ成功");
+			wwasave_savedata.id = data["save_id"];
 			show_update();
 		}).fail((xhr)=>{
 			// 失敗
@@ -132,7 +133,6 @@
 		console.log("wwasave_savedata.id:"+wwasave_savedata.id);
 		if(now_id && now_token && wwasave_savedata.id){
 			if(wwasave_savedata.id === -1){
-				console.log("UNKO!!!!!!!!!");
 				create_new_savedata();
 			}
 			else{
