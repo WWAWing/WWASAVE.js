@@ -172,7 +172,7 @@ $app->post('/save_reg/',function(Request $request, Response $response){
 	$response = $response->withHeader('Content-type', 'application/json');
 	// 送信チェックリスト
 	$registrations =  $request->getParsedBody();
-	$check_list = array('user_id', 'token', 'hp', 'at', 'df', 'money', 'player_x', 'player_y', 'long_password', 'comment');
+	$check_list = array('user_id','wwa_id', 'token', 'hp', 'at', 'df', 'money', 'player_x', 'player_y', 'long_password', 'comment');
 	try{
 		for($i=0; $i<count( $check_list ); $i++){
 			if( !array_key_exists($check_list[$i], $registrations) ){
@@ -192,7 +192,6 @@ $app->post('/save_reg/',function(Request $request, Response $response){
 			$capsule::table('savedata')->where([
 				['id', '=', $registrations["id"] ]
 			])->update([
-				'user_id' => $registrations["user_id"],
 				'hp' => $registrations["hp"],
 				'at' => $registrations["at"],
 				'df' => $registrations["df"],
@@ -208,6 +207,7 @@ $app->post('/save_reg/',function(Request $request, Response $response){
 			// insert
 			$capsule::table('savedata')->insert([
 				'user_id' => $registrations["user_id"],
+				'wwa_id' => $registrations["wwa_id"],
 				'hp' => $registrations["hp"],
 				'at' => $registrations["at"],
 				'df' => $registrations["df"],
@@ -293,9 +293,12 @@ $app->get('/save_list_get/',function(Request $request, Response $response){
 	$get_id = get_http_request_header($headers,"HTTP_ID");
 	// tokenを取得
     $get_token = get_http_request_header($headers,"HTTP_TOKEN");
+    // wwa_idを取得
+    $get_wwa_id = get_http_request_header($headers,"HTTP_WWAID");
+    // var_dump($headers);
 	try{
 		// HTTPリクエストヘッダにTOKENがあるかをチェック
-        if( empty( $get_token['0'] ) || empty( $get_id['0'] ) ){
+        if( empty( $get_token['0'] ) || empty( $get_id['0'] ) || empty( $get_wwa_id['0'] )){
             throw new Exception("token or id is noting", 1);
         }
         // tokenチェック
@@ -303,7 +306,10 @@ $app->get('/save_list_get/',function(Request $request, Response $response){
 			throw new Exception("token is wrong", 2);
 		}
 		// 全セーブデータ取得
-		$all_save_data = $capsule::table('savedata')->where('user_id', '=', $get_id['0'])->get();
+		$all_save_data = $capsule::table('savedata')->where([
+			['user_id', '=', $get_id['0'] ],
+			['wwa_id', '=', $get_wwa_id['0']]
+		])->get();
 		$res_json = json_encode($all_save_data);
 		$response->getBody()->write( $res_json );
 	} catch(Exception $e){
@@ -320,7 +326,48 @@ $app->get('/save_list_get/',function(Request $request, Response $response){
 });
 
 // セーブ削除
-
+$app->delete('/seve_del/{save_id}/',function(Request $request, Response $response){
+	// DB情報取得
+	require './conf/dbconfig.php';
+	// Content-type:application/json指定
+	$response = $response->withHeader('Content-type', 'application/json');
+	// 送信チェックリスト
+	$registrations =  $request->getParsedBody();
+	$check_list = array('user_id', 'token');
+	// save idを取得
+	$save_id = (int)$request->getAttribute('save_id');
+	try{
+		for($i=0; $i<count( $check_list ); $i++){
+			if( !array_key_exists($check_list[$i], $registrations) ){
+				throw new Exception($check_list[$i]." is nothing", 1);
+			}
+		}
+		// tokenチェック
+        if( !token_check($registrations["user_id"], $registrations["token"]) ){
+			throw new Exception("token is wrong", 2);
+		}
+		// 指定されたセーブデータの削除
+		$capsule::table('savedata')->where([
+			['id', '=', $save_id ]
+		])->delete();
+		// response
+		$res = array(
+			"message" => "Successfully saved"
+		);
+		$res_json = json_encode($res);
+		$response->getBody()->write( $res_json );
+	} catch(Exception $e){
+		// 400を返す
+		$response = $response->withStatus(400);
+		$res = array(
+			"code" => $e->getCode(),
+			"message" => $e->getMessage(),
+		);
+		$res_json = json_encode($res);
+		$response->getBody()->write( $res_json );
+	}
+	return $response;
+});
 // ユーザ削除
 
 $app->run();
