@@ -1,0 +1,22 @@
+{
+  "name": "wwasave-js",
+  "version": "1.0.0",
+  "description": "WWA Save Data Service",
+  "main": "client/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WWAWing/WWASAVE.js.git"
+  },
+  "author": "hirarira",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/WWAWing/WWASAVE.js/issues"
+  },
+  "homepage": "https://github.com/WWAWing/WWASAVE.js#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
