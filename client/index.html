@@ -22,15 +22,35 @@
 		let wwamap_url = {
 			'wwamap': './wwamap.html',
 			'caves01': './caves01.html',
-			'island02':'island02.html'
+			'island02': './island02.html'
 		};
 	</script>
 	<!-- WWAID入力ここまで -->
-	<div class="navbar navbar-default">
-		<div class="navbar-header">
-			<a class="navbar-brand">WWASAVE.js</a>
+	<nav id="header" class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" arua-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand">WWASAVE.js</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<form class="navbar-form navbar-right">
+					<div class="form-group">
+						<input class="form-control" placeholder="ID" id="login_user_id" type="text" size="10">
+					</div>
+					<div class="form-group">
+						<input class="form-control" placeholder="PASS" id="login_user_password" type="password" size="10">
+					</div>
+					<button class="btn btn-success" id="submit_login">ログイン</button>
+					<button class="btn btn-default" id="logout">ログアウト</button>
+				</form>
+			</div>
 		</div>
-	</div>
+	</nav>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-4">
@@ -47,35 +67,16 @@
 				<!-- ゲームの選択肢ここまで -->
 				<button class="btn btn-primary" id="geme_select_button">選択</button>
 				<div id="select_wwa"></div>
-				<hr>
-				<h2>ログイン</h2>
-				<div class="input-group">
-					<input class="form-control" placeholder="ID" id="login_user_id" type="text" size="10">
-				</div>
-				<div class="input-group">
-					<input class="form-control" placeholder="PASS" id="login_user_password" type="password" size="10">
-				</div>
-				<button class="btn btn-primary" id="submit_login">送信</button>
-				<hr>
-				<h2>新規登録</h2>
-				<table class="select">
-				<tr><td>
-						ID：
-				</td><td>
-					<input id="create_user_id" type="text" size="10">
-				</td></tr>
-				<tr><td>
-						PASS：
-				</td><td>
-					<input id="create_user_password" type="password" size="10">
-				</td></tr>
-				<tr><td colspan="2">
-					<button id="submit_create_user">送信</button>
-				</td></tr>
-				</table>
-				<hr>
-				<button id="logout">ログアウト</button>
-				<hr>
+				<section>
+					<h2>新規登録</h2>
+					<div class="form-group">
+						<input class="form-control" placeholder="ID" id="create_user_id" type="text" size="10">
+					</div>
+					<div class="form-group">
+						<input class="form-control" placeholder="PASS" id="create_user_password" type="password" size="10">
+					</div>
+					<button class="btn btn-primary" id="submit_create_user">送信</button>
+				</section>
 				<div id="create_user_result"></div>
 			</div>
 			<div class="col-md-8">

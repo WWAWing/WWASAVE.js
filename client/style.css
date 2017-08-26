@@ -2,7 +2,8 @@ table.select{
 	background-color:transparent;
 }
 body{
-	background-image: url("./b011.jpg")
+	background-image: url("./b011.jpg");
+	padding-top: 70px;
 }
 table{
 	background-color: white;
@@ -14,6 +15,10 @@ table{
 	text-align: center;
 	margin-left:auto;
 	margin-right:auto;
+}
+
+#header {
+	background-color: #ffc080;
 }
 footer#copyright {
 	text-align: center;
