@@ -6,8 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>WWASAVE.js</title>
 	<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" href="style.css">
-	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<link rel="stylesheet" href="./style.css">
+	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 	
 	<script type="text/javascript" src="index_page.js"></script>
@@ -77,7 +77,10 @@
 					</div>
 					<button class="btn btn-primary" id="submit_create_user">送信</button>
 				</section>
-				<div id="create_user_result"></div>
+				<div id="create_user_result" class="alert" role="alert">
+					<span class="glyphicon" aria-hidden="true"></span>
+					<span class="sr-only"></span>
+				</div>
 			</div>
 			<div class="col-md-8">
 				<h2>SAVE LIST</h2>

@@ -108,6 +108,9 @@
 					break;
 				
 			}
+			$("#create_user_result").addClass("alert-danger");
+			$("#create_user_result .glyphicon").addClass("glyphicon-exclamation-sign");
+			$("#create_user_result .sr-only").textContet = "Error";
 			$("#create_user_result").append(output_str);
 		});
 	});
