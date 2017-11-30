@@ -39,3 +39,11 @@ mysql -u 'Your_user_id' -p < ./server/sql/user.sql
 ```
 1. /client/index.html にアクセス
 
+## 使い方(Docker)
+1. Dockerを入れる
+2. Dockerfileのあるここのディレクトリで、以下のコマンドを実行
+```
+docker build -t wwasave-js ./
+docker run -p 80:80 -d --name wwasave-app wwasave-js
+```
+3. `http://localhost/client/` にアクセス

@@ -1,0 +1,5 @@
+services:
+  wwasave-server:
+    build: .
+    ports:
+     - "80:80"
