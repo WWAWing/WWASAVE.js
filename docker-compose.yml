@@ -2,12 +2,20 @@ version: '3'
 
 services:
   web:
-    build: .
+    image: php:7.0-apache
+    volumes:
+      - ./:/var/www/html
     ports:
-     - "80:80"
+      - "80:80"
+    links:
+      - mysql
   mysql:
     image: mysql:5.5
+    volumes:
+      - ./server/sql:/docker-entrypoint-initdb.d
     restart: always
     environment:
       MYSQL_DATABASE: wwasave
+      MYSQL_USER: wwasave
+      MYSQL_PASSWORD: example
       MYSQL_ROOT_PASSWORD: example
