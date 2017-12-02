@@ -1,4 +1,5 @@
 # server/vendor server/conf を除外
 server/vendor
+server/database
 server/conf
 node_modules

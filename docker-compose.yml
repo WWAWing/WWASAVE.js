@@ -1,6 +1,7 @@
-version: '3'
+version: '3.1'
 
 services:
+
   web:
     build: .
     volumes:
@@ -9,13 +10,17 @@ services:
       - "80:80"
     links:
       - mysql
+
   mysql:
     image: mysql:5.5
     volumes:
       - ./server/sql:/docker-entrypoint-initdb.d
+      - ./server/database:/var/lib/mysql
+    ports:
+      - "3306:3306"
     restart: always
     environment:
       MYSQL_DATABASE: wwasave
-      MYSQL_USER: wwasave
-      MYSQL_PASSWORD: example
-      MYSQL_ROOT_PASSWORD: example
+      MYSQL_USER: example
+      MYSQL_PASSWORD: qazwsx
+      MYSQL_ROOT_PASSWORD: qazwsx
