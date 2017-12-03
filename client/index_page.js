@@ -52,6 +52,12 @@
 			$("#save_list").append("エラーが発生しました。<br>");
 		});
 	}
+	function update_alert(id, status, title, message) {
+		$(id).removeClass();
+		$(id).addClass("alert alert-" + status);
+		$(id).children(".sr-only").html("<strong>" + title + "</strong>");
+		$(id).children(".message").text(message);
+	}
 	// ウェブストレージをチェック
 	window.onload = ()=>{
 		now_id = window.localStorage.getItem('wwasave_id');
@@ -75,12 +81,10 @@
 			}
 		}).done((data)=>{
 			// 削除成功
-			$("#create_user_result").html("");
 			$("#create_user_result").append("セーブデータ"+select_sevedata_id+"番を削除しました。");
 			show_save_list();
 		}).fail((xhr)=>{
 			// 削除失敗
-			$("#create_user_result").html("");
 			let output_str = "";
 			switch(xhr.status){
 				case 400:
@@ -108,10 +112,7 @@
 					break;
 				
 			}
-			$("#create_user_result").addClass("alert-danger");
-			$("#create_user_result .glyphicon").addClass("glyphicon-exclamation-sign");
-			$("#create_user_result .sr-only").textContet = "Error";
-			$("#create_user_result").append(output_str);
+			update_alert("#create_user_result", "danger", "Error:", output_str);
 		});
 	});
 	// ゲームの選択
@@ -151,15 +152,13 @@
 			// ログイン成功
 			now_id = submit_id;
 			now_token = data.token;
-			$("#create_user_result").html("");
-			$("#create_user_result").append(now_id+"でログインしました。");
+			update_alert("#create_user_result", "success", "", now_id + "でログインしました。")
 			window.localStorage.setItem('wwasave_id', submit_id);
 			window.localStorage.setItem('wwasave_token', data.token);
 			
 			show_save_list();
 		}).fail((xhr)=>{
 			// ログイン失敗
-			$("#create_user_result").html("");
 			let output_str = "";
 			switch(xhr.status){
 				case 400:
@@ -190,7 +189,7 @@
 					break;
 				
 			}
-			$("#create_user_result").append(output_str);
+			update_alert("#create_user_result",　"danger", "Error", output_str);
 		});
 	});
 	// ユーザ新規作成
@@ -207,10 +206,8 @@
 		}).done((data)=>{
 			now_id = submit_id;
 			now_token = data.token;
-			$("#create_user_result").html("");
 			$("#create_user_result").append(now_id+"でログインしました。");
 		}).fail((xhr)=>{
-			$("#create_user_result").html("");
 			let output_str = "";
 			switch(xhr.status){
 				case 400:
@@ -239,17 +236,15 @@
 				default:
 					output_str = "予期せぬエラーが発生しています。";
 					break;
-				
 			}
-			$("#create_user_result").append(output_str);
+			update_alert("#create_user_result", "danger", "Error", output_str);
 		});
 	});
 	// ログアウト
 	$(document).on("click","#logout",()=>{
 		now_id = "";
 		now_token = "";
-		$("#create_user_result").html("");
-		$("#create_user_result").append("ログアウトしました。");
+		update_alert("#create_user_result", "success", "", "ログアウトしました");
 		$("#save_list").html("");
 		window.localStorage.removeItem('wwasave_id');
 		window.localStorage.removeItem('wwasave_token');
