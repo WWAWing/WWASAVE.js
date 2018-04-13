@@ -29,3 +29,7 @@ footer#copyright {
 #right_box{
 	float: rigth;
 }
+
+.is_hidden {
+	display: none;
+}

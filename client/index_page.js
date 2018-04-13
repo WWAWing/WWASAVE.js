@@ -8,6 +8,7 @@
 		console.log("ログイン済");
 		console.log("ID:"+now_id);
 		console.log("token:"+now_token);
+		change_login();
 		$("#save_list").html("");
 		$("#save_list").append("ID:"+now_id+"でログインしています。<br>");
 		$("#save_list").append("現在の選択ゲーム："+now_wwa_id+"<br><br>");
@@ -24,30 +25,23 @@
 		}).done((data)=>{
 			console.log(data);
 			// セーブデータ一覧を出力
-			let output_table = "<table  border='1'><tr><th>ID</th><th>hp</th><th>at</th><th>df</th><th>money</th><th>time</th><th>comment</th></tr>";
+			let output_item = "";
 			for(let i=0; i<data.length; i++){
-				output_table += "<tr>";
-				output_table += "<td>"+(i+1)+"</td>";
-				output_table += "<td>"+data[i]["hp"]+"</td>";
-				output_table += "<td>"+data[i]["at"]+"</td>";
-				output_table += "<td>"+data[i]["df"]+"</td>";
-				output_table += "<td>"+data[i]["money"]+"</td>";
-				output_table += "<td>"+data[i]["save_time"]+"</td>";
-				output_table += "<td>"+data[i]["comment"]+"</td>";
-				output_table += "</tr>";
+				output_item += `<div id="save_${i + 1}" class="card">\n\t<div class="card-body">\n\t\t<h5 class="card-title">ID: ${i + 1}</h5>\n\t\t<h6 class="card-subtitle">${data[i]["save_time"]}</h6>\n`;
+				output_item += `\t\t<p class="card-text">${data[i]["comment"]}</p>\n\t\t<a class="card-link save-play">遊ぶ</a>\n\t\t<a class="card-link save_remove">削除</a>\n\t</div>\n</div>`;
 			}
-			output_table += "</table>";
-			output_table += "<hr>";
-			output_table += "<h2>セーブデータ選択</h2>";
-			output_table += '<select id="select_savedata" size="1">';
+			output_item += "</table>";
+			output_item += "<hr>";
+			output_item += "<h2>セーブデータ選択</h2>";
+			output_item += '<select id="select_savedata" size="1">';
 			for(let i=0; i<data.length; i++){
-				output_table += '<option value="'+data[i]["id"]+'">'+(i+1)+'</option>';
+				output_item += '<option value="'+data[i]["id"]+'">'+(i+1)+'</option>';
 			}
-			output_table += '</select>';
-			output_table += '<button id="submit_savedata_id">選択</button><br><br>';
-			output_table += '<button id="submit_delete_savedata_id">セーブの削除</button><br><br>';
-			output_table += '<button id="submit_newgame">NEW GAME</button>';
-			$("#save_list").append(output_table);
+			output_item += '</select>';
+			output_item += '<button id="submit_savedata_id">選択</button><br><br>';
+			output_item += '<button id="submit_delete_savedata_id">セーブの削除</button><br><br>';
+			output_item += '<button id="submit_newgame">NEW GAME</button>';
+			$("#save_list").append(output_item);
 		}).fail((xhr)=>{
 			$("#save_list").append("エラーが発生しました。<br>");
 		});
@@ -55,8 +49,26 @@
 	function update_alert(id, status, title, message) {
 		$(id).removeClass();
 		$(id).addClass("alert alert-" + status);
-		$(id).children(".sr-only").html("<strong>" + title + "</strong>");
+		$(id).children(".title").html("<strong>" + title + "</strong>");
 		$(id).children(".message").text(message);
+	}
+	/**
+	 * フォームの配置をログイン用に切り替えます。
+	 */
+	function change_login() {
+		$("#logout").removeClass("is_hidden");
+		$("#user_logged_in").removeClass("is_hidden");
+		$("#submit_login").addClass("is_hidden");
+		$("#user_regist").addClass("is_hidden");
+	}
+	/**
+	 * フォームの配置を未ログイン用に切り替えます。
+	 */
+	function change_logout() {
+		$("#submit_login").removeClass("is_hidden");
+		$("#user_regist").removeClass("is_hidden");
+		$("#logout").addClass("is_hidden");
+		$("#user_logged_in").addClass("is_hidden");
 	}
 	// ウェブストレージをチェック
 	window.onload = ()=>{
@@ -189,7 +201,7 @@
 					break;
 				
 			}
-			update_alert("#create_user_result",　"danger", "Error", output_str);
+			update_alert("#create_user_result", "danger", "Error", output_str);
 		});
 	});
 	// ユーザ新規作成
@@ -245,6 +257,7 @@
 		now_id = "";
 		now_token = "";
 		update_alert("#create_user_result", "success", "", "ログアウトしました");
+		change_logout();
 		$("#save_list").html("");
 		window.localStorage.removeItem('wwasave_id');
 		window.localStorage.removeItem('wwasave_token');
