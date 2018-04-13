@@ -7,10 +7,10 @@
 	<title>WWASAVE.js</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<link rel="stylesheet" href="./style.css">
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>	
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-	<script type="text/javascript" src="index_page.js"></script>
+	<script type="text/javascript" src="./index_page.js"></script>
 </head>
 <body>
 	<!-- 
@@ -26,54 +26,57 @@
 		};
 	</script>
 	<!-- WWAID入力ここまで -->
-	<nav id="header" class="navbar navbar-light box-shadow">
+	<nav id="header" class="navbar navbar-expand-lg navbar-light box-shadow">
 		<div class="container">
 			<a class="navbar-brand">WWASAVE.js</a>
-			<div class="navbar-header">
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#headerNavbar" aria-expanded="false" aria-controls="headerNavbar" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-			</div>
-			<div id="headerNavbar" class="collapse">
-				<form class="navbar-form navbar-right">
-					<div class="form-group">
-						<input class="form-control" placeholder="ID" id="login_user_id" type="text" size="10">
-					</div>
-					<div class="form-group">
-						<input class="form-control" placeholder="PASS" id="login_user_password" type="password" size="10">
-					</div>
-					<button class="btn btn-success" id="submit_login">ログイン</button>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#headerNavbar" aria-controls="headerNavbar" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="headerNavbar">
+				<div class="mr-auto"></div>
+				<div class="form-inline">
+					<input class="form-control mr-sm-1" placeholder="ID" id="login_user_id" type="text" size="10">
+					<input class="form-control mr-sm-2" placeholder="PASS" id="login_user_password" type="password" size="10">
+					<button class="btn btn-success mr-sm-1" id="submit_login">ログイン</button>
 					<button class="btn btn-default" id="logout">ログアウト</button>
-				</form>
+				</div>
 			</div>
 		</div>
 	</nav>
-	<div class="container">
+	<div class="container mt-4">
 		<div class="row">
 			<div class="col-md-4">
-				<!--
-					ゲームの選択肢をここに追加してください。
-					<option value="（WWAID、上のIDと対応させてください）">（表示するマップ名）</option>
-				-->
-				<h2>ゲーム選択</h2>
-				<select class="form-control" id="wwa_id">
-					<option value="wwamap">Standard Map</option>
-					<option value="island02">Fantasy Island</option>
-					<option value="caves01">Cave Dungeon I</option>
-				</select>
-				<!-- ゲームの選択肢ここまで -->
-				<button class="btn btn-primary" id="geme_select_button">選択</button>
-				<div id="select_wwa"></div>
-				<section>
-					<h2>新規登録</h2>
-					<div class="form-group">
-						<input class="form-control" placeholder="ID" id="create_user_id" type="text" size="10">
+				<div class="card mb-1">
+					<div class="card-body">
+						<h5 class="card-title">ゲーム選択</h5>
+							<!--
+								ゲームの選択肢をここに追加してください。
+								<option value="（WWAID、上のIDと対応させてください）">（表示するマップ名）</option>
+							-->
+						<select class="form-control" id="wwa_id">
+							<option value="wwamap">Standard Map</option>
+							<option value="island02">Fantasy Island</option>
+							<option value="caves01">Cave Dungeon I</option>
+						</select>
+						<!-- ゲームの選択肢ここまで -->
+						<button class="btn btn-primary" id="geme_select_button">選択</button>
+						<div id="select_wwa"></div>
 					</div>
-					<div class="form-group">
-						<input class="form-control" placeholder="PASS" id="create_user_password" type="password" size="10">
+				</div>
+				<div class="card mb-2">
+					<div class="card-body">
+						<h5 class="card-titie">新規登録</h5>
+						<div class="form-group">
+							<label for="create_user_id">ユーザーID</label>
+							<input class="form-control" placeholder="ID" id="create_user_id" type="text" size="10">
+						</div>
+						<div class="form-group">
+							<label for="create_user_password">パスワード</label>
+							<input class="form-control" placeholder="PASS" id="create_user_password" type="password" size="10">
+						</div>
+						<button class="btn btn-primary" id="submit_create_user">送信</button>
 					</div>
-					<button class="btn btn-primary" id="submit_create_user">送信</button>
-				</section>
+				</div>
 				<div id="create_user_result" class="alert" role="alert">
 					<span class="glyphicon" aria-hidden="true"></span>
 					<span class="sr-only"></span>
