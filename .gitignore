@@ -2,6 +2,7 @@
 server/vendor
 server/database
 server/conf/dbconfig.php
-client/script.js
+client/index_page.js
+client/wwa_page.js
 node_modules
 yarn-error.log

@@ -1,8 +1,13 @@
+var webpack = require('webpack');
+
 module.exports = {
-  entry: './client/src/index_page.js',
-  mode: 'production',
+  entry: {
+    index_page: './client/src/index_page.js',
+    wwa_page: './client/src/wwa_page.js'
+  },
+  mode: 'development',
   output: {
-    filename: 'script.js',
+    filename: '[name].js',
     path: __dirname + '/client'
   },
   module: {

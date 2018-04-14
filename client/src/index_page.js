@@ -1,7 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
+import 'bootstrap';
 
-(()=>{
+(() => {
 	"use strict";
 	let $ = require('jquery');
 	let now_id = "";
@@ -37,19 +38,11 @@ import './style.css';
 				output_item += `\t\t<h6 class="card-subtitle">生命力: ${data[i]["hp"]} 攻撃力: ${data[i]["at"]} 防御力: ${data[i]["df"]} 所持金: ${data[i]["money"]}</h6>\n`;
 				output_item += `\t\t<p class="card-text">${data[i]["comment"]}</p>\n`;
 				output_item += `\t\t<p class="card-text"><small class="text-muted">${data[i]["save_time"]}</small></p>\n`;
-				output_item += `\t\t<a href="#" class="card-link save-play">遊ぶ</a>\n`;
-				output_item += `\t\t<a href="#" class="card-link save_remove">削除</a>\n\t</div>\n</div>`;
+				output_item += `\t\t<a href="#" class="card-link save_play" value="${data[i]["id"]}">遊ぶ</a>\n`;
+				output_item += `\t\t<a href="#" class="card-link save_remove" value="${data[i]["id"]}">削除</a>\n`;
+				output_item += `\t</div>\n</div>`;
 			}
-			output_item += "<hr>";
-			output_item += "<h2>セーブデータ選択</h2>";
-			output_item += '<select id="select_savedata" size="1">';
-			for(let i=0; i<data.length; i++){
-				output_item += '<option value="'+data[i]["id"]+'">'+(i+1)+'</option>';
-			}
-			output_item += '</select>';
-			output_item += '<button id="submit_savedata_id">選択</button><br><br>';
-			output_item += '<button id="submit_delete_savedata_id">セーブの削除</button><br><br>';
-			output_item += '<button id="submit_newgame">NEW GAME</button>';
+			output_item += '<button class="btn btn-primary" id="submit_newgame">NEW GAME</button>';
 			$("#save_list").append(output_item);
 		}).fail((xhr)=>{
 			$("#save_list").append("エラーが発生しました。<br>");
@@ -85,30 +78,34 @@ import './style.css';
 		$("#logout").addClass("is_hidden");
 		$("#user_logged_in").addClass("is_hidden");
 	}
-	// ウェブストレージをチェック
-	window.onload = ()=>{
-		now_id = window.localStorage.getItem('wwasave_id');
-		now_token = window.localStorage.getItem('wwasave_token');
-		now_wwa_id = $("#wwa_id").val();
-		if(now_id && now_token && now_wwa_id){
-			show_save_list();
-		}
-		console.log(wwamap_url);
+
+	/**
+	 * 引数で指定したセーブデータをプレイします。
+	 * @param {number} id セーブデータのID
+	 */
+	function playSavedata(id) {
+		// 選択中のセーブデータIDをローカルストレージへ保存
+		window.localStorage.setItem('wwasave_savedata_id', id);
+		window.localStorage.setItem('wwa_id', now_wwa_id);
+		// ページ遷移
+		window.location.href = wwamap_url[ now_wwa_id ];
 	}
-	// セーブデータの削除
-	$(document).on("click","#submit_delete_savedata_id",()=>{
-		let select_sevedata_id = $("#select_savedata").val();
-		console.log("セーブデータ削除"+select_sevedata_id);
+	/**
+	 * 引数で指定したセーブデータを削除します。
+	 * @param {number} id セーブデータのID
+	 */
+	function removeSavedata(id) {
+		console.log("セーブデータ削除" + id);
 		$.ajax({
-			url:'../server/index.php/seve_del/' + select_sevedata_id + "/",
-			type:'DELETE',
-			data:{
+			url: '../server/index.php/seve_del/' + id + "/",
+			type: 'DELETE',
+			data: {
 				user_id: now_id,
 				token: now_token
 			}
 		}).done((data)=>{
 			// 削除成功
-			$("#create_user_result").append("セーブデータ"+select_sevedata_id+"番を削除しました。");
+			$("#create_user_result").append("セーブデータ" + id + "番を削除しました。");
 			show_save_list();
 		}).fail((xhr)=>{
 			// 削除失敗
@@ -137,33 +134,44 @@ import './style.css';
 				default:
 					output_str = "予期せぬエラーが発生しています。";
 					break;
-				
 			}
 			update_alert("#create_user_result", "danger", "Error:", output_str);
 		});
-	});
+	}
+
+	// ウェブストレージをチェック
+	window.onload = () => {
+		now_id = window.localStorage.getItem('wwasave_id');
+		now_token = window.localStorage.getItem('wwasave_token');
+		now_wwa_id = $("#wwa_id").val();
+		if(now_id && now_token && now_wwa_id){
+			show_save_list();
+		}
+		console.log(wwamap_url);
+	}
+	$(document).on("click", ".save_play", (event) => {
+		let wwaId = $(event.target).attr("value");
+		playSavedata(wwaId);
+	})
+	$(document).on("click", ".save_remove", (event) => {
+		let wwaId = $(event.target).attr("value");
+		removeSavedata(wwaId);
+	})
+
 	// ゲームの選択
-	$(document).on("click","#geme_select_button",()=>{
+	$(document).on("click", "#geme_select_button", () => {
 		now_wwa_id = $("#wwa_id").val();
 		window.localStorage.setItem('wwa_id', now_wwa_id);
 		show_save_list();
 	});
-	// WWAプレイページへの遷移
-	$(document).on("click","#submit_savedata_id",()=>{
-		// 選択中のセーブデータIDをローカルストレージへ保存
-		let select_sevedata_id = $("#select_savedata").val();
-		window.localStorage.setItem('wwasave_savedata_id', select_sevedata_id);
-		window.localStorage.setItem('wwa_id', now_wwa_id);
-		// ページ遷移
-		window.location.href = wwamap_url[ now_wwa_id ];
-	});
 	// NEW GAMEで開始
-	$(document).on("click","#submit_newgame",()=>{
+	$(document).on("click", "#submit_newgame", () => {
 		window.localStorage.setItem('wwasave_savedata_id', -1);
 		window.localStorage.setItem('wwa_id', now_wwa_id);
 		// ページ遷移
 		window.location.href = wwamap_url[ now_wwa_id ];
 	});
+
 	// ログイン
 	$(document).on("click","#submit_login",()=>{
 		let submit_id = $('#login_user_id').val();
