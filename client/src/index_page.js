@@ -1,5 +1,6 @@
 (()=>{
 	"use strict";
+	let $ = require('jquery');
 	let now_id = "";
 	let now_token = "";
 	let now_wwa_id = ""
@@ -10,7 +11,7 @@
 		console.log("token:"+now_token);
 		change_login();
 		$("#save_list").html("");
-		$("#save_list").append("ID:"+now_id+"でログインしています。<br>");
+		$("#login_status").html("ID:"+now_id+"でログインしています。");
 		$("#save_list").append("現在の選択ゲーム："+now_wwa_id+"<br><br>");
 		console.log("WWA:"+now_wwa_id);
 		// save listを取得
@@ -27,10 +28,15 @@
 			// セーブデータ一覧を出力
 			let output_item = "";
 			for(let i=0; i<data.length; i++){
-				output_item += `<div id="save_${i + 1}" class="card">\n\t<div class="card-body">\n\t\t<h5 class="card-title">ID: ${i + 1}</h5>\n\t\t<h6 class="card-subtitle">${data[i]["save_time"]}</h6>\n`;
-				output_item += `\t\t<p class="card-text">${data[i]["comment"]}</p>\n\t\t<a class="card-link save-play">遊ぶ</a>\n\t\t<a class="card-link save_remove">削除</a>\n\t</div>\n</div>`;
+				output_item += `<div id="save_${i + 1}" class="card">\n`;
+				output_item += `\t<div class="card-body">\n`;
+				output_item += `\t\t<h5 class="card-title">ID: ${i + 1}</h5>\n`;
+				output_item += `\t\t<h6 class="card-subtitle">生命力: ${data[i]["hp"]} 攻撃力: ${data[i]["at"]} 防御力: ${data[i]["df"]} 所持金: ${data[i]["money"]}</h6>\n`;
+				output_item += `\t\t<p class="card-text">${data[i]["comment"]}</p>\n`;
+				output_item += `\t\t<p class="card-text"><small class="text-muted">${data[i]["save_time"]}</small></p>\n`;
+				output_item += `\t\t<a href="#" class="card-link save-play">遊ぶ</a>\n`;
+				output_item += `\t\t<a href="#" class="card-link save_remove">削除</a>\n\t</div>\n</div>`;
 			}
-			output_item += "</table>";
 			output_item += "<hr>";
 			output_item += "<h2>セーブデータ選択</h2>";
 			output_item += '<select id="select_savedata" size="1">';
@@ -58,6 +64,9 @@
 	function change_login() {
 		$("#logout").removeClass("is_hidden");
 		$("#user_logged_in").removeClass("is_hidden");
+
+		$("#login_user_id").addClass("is_hidden");
+		$("#login_user_password").addClass("is_hidden");
 		$("#submit_login").addClass("is_hidden");
 		$("#user_regist").addClass("is_hidden");
 	}
@@ -65,8 +74,11 @@
 	 * フォームの配置を未ログイン用に切り替えます。
 	 */
 	function change_logout() {
+		$("#login_user_id").removeClass("is_hidden");
+		$("#login_user_password").removeClass("is_hidden");
 		$("#submit_login").removeClass("is_hidden");
 		$("#user_regist").removeClass("is_hidden");
+
 		$("#logout").addClass("is_hidden");
 		$("#user_logged_in").addClass("is_hidden");
 	}
@@ -258,6 +270,7 @@
 		now_token = "";
 		update_alert("#create_user_result", "success", "", "ログアウトしました");
 		change_logout();
+		$("#login_status").html("");
 		$("#save_list").html("");
 		window.localStorage.removeItem('wwasave_id');
 		window.localStorage.removeItem('wwasave_token');

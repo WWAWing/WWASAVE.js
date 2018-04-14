@@ -2,4 +2,6 @@
 server/vendor
 server/database
 server/conf/dbconfig.php
+client/script.js
 node_modules
+yarn-error.log
