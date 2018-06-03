@@ -18,7 +18,7 @@
 * 1つのスクリプトに対し1つのWWAしか対応していない、複数のWWAマップ間でデータを共有するような使い方はできない
 
 ## デモ
-* https://info.wwawing.com/wwawing-save/WWASAVE.js/client/
+* http://tau.local/WWASAVE.js/client/index.html
 
 ## 必要環境例
 * Apache(webサーバ)
