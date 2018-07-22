@@ -1,0 +1,11 @@
+Host: localhost
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:53.0) Gecko/20100101 Firefox/53.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: ja,en-US;q=0.7,en;q=0.3
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Cache-Control: max-age=0
+id: a
+token: 7070f54639e6429c5c20c026cfe5cea58b168bd4af35b0002868d0a956e9c36b773ecfbcc3b14a25fa14cb39694d070d6daa94831deab08992b5fabfedcc5c287284b6adfdf0272b42e9b9ecf6c28fa4e26d1550e1b85bf0b0c45e88ccd4156e9d233ab207ca5633823139fcf06adea24703bfdcab5a39b7fe5cfedff5ed115fe5744519064ed6c21c5a6600b6b8a43c7d602e37466e7049cb47685b3e614ef9913ffecf10421f988c07106908b98a70d5f923290a65ac4083f21740b9f51c371750f051f46015a56c5c31c7d3dc5b6e1dcab5de039082fa03d6e63c8291f230110564b62a14c056614f141d9c4d394cabcbb0ae184d460f39b1cc65d2b580
+

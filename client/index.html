@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>WWASAVE.js</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="style.css" type="text/css" />
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	
+	<script type="text/javascript" src="index_page.js"></script>
+</head>
+<body>
+	<!-- 
+		WWAのIDをvalueに入力してください。 
+		他のWWAとIDは重複しないようにしてください。
+		'（WWAID）': '（ジャンプするURL）',
+	-->
+	<script type="text/javascript">
+		let wwamap_url = {
+			'wwamap': './wwamap.html',
+			'caves01': './caves01.html',
+			'island02':'island02.html'
+		};
+	</script>
+	<!-- WWAID入力ここまで -->
+	<h1>WWASAVE.js</h1>
+	<div id="left_box">
+		<!--
+			ゲームの選択肢をここに追加してください。
+			<option value="（WWAID、上のIDと対応させてください）">（表示するマップ名）</option>
+		-->
+		<h2>ゲーム選択</h2>
+		<select id="wwa_id">
+			<option value="wwamap">Standard Map</option>
+			<option value="island02">Fantasy Island</option>
+			<option value="caves01">Cave Dungeon I</option>
+		</select>
+		<!-- ゲームの選択肢ここまで -->
+		<button id="geme_select_button">選択</button>
+		<div id="select_wwa"></div>
+		<hr>
+		<h2>ログイン</h2>
+		<table class="select">
+		<tr><td>
+				ID：
+		</td><td>
+			<input id="login_user_id" type="text" size="10">
+		</td></tr>
+		<tr><td>
+				PASS：
+		</td><td>
+			<input id="login_user_password" type="password" size="10">
+		</td></tr>
+		<tr><td colspan="2">
+			<button id="submit_login">送信</button>
+		</td></tr>
+		</table>
+		<hr>
+		<h2>新規登録</h2>
+		<table class="select">
+		<tr><td>
+				ID：
+		</td><td>
+			<input id="create_user_id" type="text" size="10">
+		</td></tr>
+		<tr><td>
+				PASS：
+		</td><td>
+			<input id="create_user_password" type="password" size="10">
+		</td></tr>
+		<tr><td colspan="2">
+			<button id="submit_create_user">送信</button>
+		</td></tr>
+		</table>
+		<hr>
+		<button id="logout">ログアウト</button>
+		<hr>
+		<div id="create_user_result"></div>
+	</div>
+	<div id="right_box">
+		<h2>SAVE LIST</h2>
+		<div id="save_list"></div>
+	</div>
+</body>
+</html>
