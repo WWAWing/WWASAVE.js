@@ -17,9 +17,6 @@
 * トランザクション考慮してないので不具合が起きそう
 * 1つのスクリプトに対し1つのWWAしか対応していない、複数のWWAマップ間でデータを共有するような使い方はできない
 
-## デモ
-* https://info.wwawing.com/wwawing-save/WWASAVE.js/client/
-
 ## 必要環境例
 * Apache(webサーバ)
 * PHP
@@ -28,7 +25,7 @@
 ## 使い方
 1. /var/www/html上でgit cloneする
 1. /server/conf/を作成し、以下のサイトのdbconfig.phpを参考にDB接続情報を記述
-http://qiita.com/zaburo/items/9b8aa05c975677669142
+	1. http://qiita.com/zaburo/items/9b8aa05c975677669142
 
 1. DBにアクセスして以下のコマンドを入力  
 `create database wwasave`
