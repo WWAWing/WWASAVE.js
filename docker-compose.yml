@@ -7,7 +7,7 @@ services:
     volumes:
       - .:/var/www/html
     ports:
-      - "80:80"
+      - "8080:80"
     links:
       - mysql
 
@@ -16,7 +16,7 @@ services:
     volumes:
       - ./server/sql:/docker-entrypoint-initdb.d
     ports:
-      - "3306:3306"
+      - "3306"
     restart: always
     environment:
       MYSQL_DATABASE: wwasave
