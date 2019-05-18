@@ -17,16 +17,13 @@
 * トランザクション考慮してないので不具合が起きそう
 * 1つのスクリプトに対し1つのWWAしか対応していない、複数のWWAマップ間でデータを共有するような使い方はできない
 
-## 必要環境例
-* Apache(webサーバ)
-* PHP
-* MySQL
+## 使い方（Dockerを使う方法）
+1. 任意の場所で git cloneする
+1. `docker-compose up -d`
+1. `http://your_ip_addr:8080/client/` にアクセス
 
-## 使い方
+## 使い方（Dockerを使わない方法）
 1. /var/www/html上でgit cloneする
-1. /server/conf/を作成し、以下のサイトのdbconfig.phpを参考にDB接続情報を記述
-	1. http://qiita.com/zaburo/items/9b8aa05c975677669142
-
 1. DBにアクセスして以下のコマンドを入力  
 `create database wwasave`
 1. /server/sql/内のsavedata.sqlとuser.sqlを実行
@@ -34,5 +31,5 @@
 mysql -u 'Your_user_id' -p < ./server/sql/savedata.sql
 mysql -u 'Your_user_id' -p < ./server/sql/user.sql
 ```
+1. `./server/conf/dbconfig.php` の設定をお使いのDBに合わせる
 1. /client/index.html にアクセス
-
