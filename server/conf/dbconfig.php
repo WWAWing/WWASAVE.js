@@ -6,6 +6,7 @@
 
     $capsule = new Capsule;
 
+    // dockerを使わない場合、設定をお使いのDBに合わせてください
     $capsule->addConnection([
         'driver'    => 'mysql',
         'host'      => 'mysql',
