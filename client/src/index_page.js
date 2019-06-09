@@ -1,5 +1,10 @@
-(()=>{
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './style.css';
+import 'bootstrap';
+
+(() => {
 	"use strict";
+	let $ = require('jquery');
 	let now_id = "";
 	let now_token = "";
 	let now_wwa_id = ""
@@ -8,8 +13,9 @@
 		console.log("ログイン済");
 		console.log("ID:"+now_id);
 		console.log("token:"+now_token);
+		change_login();
 		$("#save_list").html("");
-		$("#save_list").append("ID:"+now_id+"でログインしています。<br>");
+		$("#login_status").html("ID:"+now_id+"でログインしています。");
 		$("#save_list").append("現在の選択ゲーム："+now_wwa_id+"<br><br>");
 		console.log("WWA:"+now_wwa_id);
 		// save listを取得
@@ -24,63 +30,85 @@
 		}).done((data)=>{
 			console.log(data);
 			// セーブデータ一覧を出力
-			let output_table = "<table  border='1'><tr><th>ID</th><th>hp</th><th>at</th><th>df</th><th>money</th><th>time</th><th>comment</th></tr>";
+			let output_item = "";
 			for(let i=0; i<data.length; i++){
-				output_table += "<tr>";
-				output_table += "<td>"+(i+1)+"</td>";
-				output_table += "<td>"+data[i]["hp"]+"</td>";
-				output_table += "<td>"+data[i]["at"]+"</td>";
-				output_table += "<td>"+data[i]["df"]+"</td>";
-				output_table += "<td>"+data[i]["money"]+"</td>";
-				output_table += "<td>"+data[i]["save_time"]+"</td>";
-				output_table += "<td>"+data[i]["comment"]+"</td>";
-				output_table += "</tr>";
+				output_item += `<div id="save_${i + 1}" class="card">\n`;
+				output_item += `\t<div class="card-body">\n`;
+				output_item += `\t\t<h5 class="card-title">ID: ${i + 1}</h5>\n`;
+				output_item += `\t\t<h6 class="card-subtitle">生命力: ${data[i]["hp"]} 攻撃力: ${data[i]["at"]} 防御力: ${data[i]["df"]} 所持金: ${data[i]["money"]}</h6>\n`;
+				output_item += `\t\t<p class="card-text">${data[i]["comment"]}</p>\n`;
+				output_item += `\t\t<p class="card-text"><small class="text-muted">${data[i]["save_time"]}</small></p>\n`;
+				output_item += `\t\t<a href="#" class="card-link save_play" value="${data[i]["id"]}">遊ぶ</a>\n`;
+				output_item += `\t\t<a href="#" class="card-link save_remove" value="${data[i]["id"]}">削除</a>\n`;
+				output_item += `\t</div>\n</div>`;
 			}
-			output_table += "</table>";
-			output_table += "<hr>";
-			output_table += "<h2>セーブデータ選択</h2>";
-			output_table += '<select id="select_savedata" size="1">';
-			for(let i=0; i<data.length; i++){
-				output_table += '<option value="'+data[i]["id"]+'">'+(i+1)+'</option>';
-			}
-			output_table += '</select>';
-			output_table += '<button id="submit_savedata_id">選択</button><br><br>';
-			output_table += '<button id="submit_delete_savedata_id">セーブの削除</button><br><br>';
-			output_table += '<button id="submit_newgame">NEW GAME</button>';
-			$("#save_list").append(output_table);
+			output_item += '<button class="btn btn-primary" id="submit_newgame">NEW GAME</button>';
+			$("#save_list").append(output_item);
 		}).fail((xhr)=>{
 			$("#save_list").append("エラーが発生しました。<br>");
 		});
 	}
-	// ウェブストレージをチェック
-	window.onload = ()=>{
-		now_id = window.localStorage.getItem('wwasave_id');
-		now_token = window.localStorage.getItem('wwasave_token');
-		now_wwa_id = $("#wwa_id").val();
-		if(now_id && now_token && now_wwa_id){
-			show_save_list();
-		}
-		console.log(wwamap_url);
+	function update_alert(id, status, title, message) {
+		$(id).removeClass();
+		$(id).addClass("alert alert-" + status);
+		$(id).children(".title").html("<strong>" + title + "</strong>");
+		$(id).children(".message").text(message);
 	}
-	// セーブデータの削除
-	$(document).on("click","#submit_delete_savedata_id",()=>{
-		let select_sevedata_id = $("#select_savedata").val();
-		console.log("セーブデータ削除"+select_sevedata_id);
+	/**
+	 * フォームの配置をログイン用に切り替えます。
+	 */
+	function change_login() {
+		$("#logout").removeClass("is_hidden");
+		$("#user_logged_in").removeClass("is_hidden");
+
+		$("#login_user_id").addClass("is_hidden");
+		$("#login_user_password").addClass("is_hidden");
+		$("#submit_login").addClass("is_hidden");
+		$("#user_regist").addClass("is_hidden");
+	}
+	/**
+	 * フォームの配置を未ログイン用に切り替えます。
+	 */
+	function change_logout() {
+		$("#login_user_id").removeClass("is_hidden");
+		$("#login_user_password").removeClass("is_hidden");
+		$("#submit_login").removeClass("is_hidden");
+		$("#user_regist").removeClass("is_hidden");
+
+		$("#logout").addClass("is_hidden");
+		$("#user_logged_in").addClass("is_hidden");
+	}
+
+	/**
+	 * 引数で指定したセーブデータをプレイします。
+	 * @param {number} id セーブデータのID
+	 */
+	function playSavedata(id) {
+		// 選択中のセーブデータIDをローカルストレージへ保存
+		window.localStorage.setItem('wwasave_savedata_id', id);
+		window.localStorage.setItem('wwa_id', now_wwa_id);
+		// ページ遷移
+		window.location.href = wwamap_url[ now_wwa_id ];
+	}
+	/**
+	 * 引数で指定したセーブデータを削除します。
+	 * @param {number} id セーブデータのID
+	 */
+	function removeSavedata(id) {
+		console.log("セーブデータ削除" + id);
 		$.ajax({
-			url:'../server/index.php/seve_del/' + select_sevedata_id + "/",
-			type:'DELETE',
-			data:{
+			url: '../server/index.php/seve_del/' + id + "/",
+			type: 'DELETE',
+			data: {
 				user_id: now_id,
 				token: now_token
 			}
 		}).done((data)=>{
 			// 削除成功
-			$("#create_user_result").html("");
-			$("#create_user_result").append("セーブデータ"+select_sevedata_id+"番を削除しました。");
+			$("#create_user_result").append("セーブデータ" + id + "番を削除しました。");
 			show_save_list();
 		}).fail((xhr)=>{
 			// 削除失敗
-			$("#create_user_result").html("");
 			let output_str = "";
 			switch(xhr.status){
 				case 400:
@@ -106,33 +134,44 @@
 				default:
 					output_str = "予期せぬエラーが発生しています。";
 					break;
-				
 			}
-			$("#create_user_result").append(output_str);
+			update_alert("#create_user_result", "danger", "Error:", output_str);
 		});
-	});
+	}
+
+	// ウェブストレージをチェック
+	window.onload = () => {
+		now_id = window.localStorage.getItem('wwasave_id');
+		now_token = window.localStorage.getItem('wwasave_token');
+		now_wwa_id = $("#wwa_id").val();
+		if(now_id && now_token && now_wwa_id){
+			show_save_list();
+		}
+		console.log(wwamap_url);
+	}
+	$(document).on("click", ".save_play", (event) => {
+		let wwaId = $(event.target).attr("value");
+		playSavedata(wwaId);
+	})
+	$(document).on("click", ".save_remove", (event) => {
+		let wwaId = $(event.target).attr("value");
+		removeSavedata(wwaId);
+	})
+
 	// ゲームの選択
-	$(document).on("click","#geme_select_button",()=>{
+	$(document).on("click", "#geme_select_button", () => {
 		now_wwa_id = $("#wwa_id").val();
 		window.localStorage.setItem('wwa_id', now_wwa_id);
 		show_save_list();
 	});
-	// WWAプレイページへの遷移
-	$(document).on("click","#submit_savedata_id",()=>{
-		// 選択中のセーブデータIDをローカルストレージへ保存
-		let select_sevedata_id = $("#select_savedata").val();
-		window.localStorage.setItem('wwasave_savedata_id', select_sevedata_id);
-		window.localStorage.setItem('wwa_id', now_wwa_id);
-		// ページ遷移
-		window.location.href = wwamap_url[ now_wwa_id ];
-	});
 	// NEW GAMEで開始
-	$(document).on("click","#submit_newgame",()=>{
+	$(document).on("click", "#submit_newgame", () => {
 		window.localStorage.setItem('wwasave_savedata_id', -1);
 		window.localStorage.setItem('wwa_id', now_wwa_id);
 		// ページ遷移
 		window.location.href = wwamap_url[ now_wwa_id ];
 	});
+
 	// ログイン
 	$(document).on("click","#submit_login",()=>{
 		let submit_id = $('#login_user_id').val();
@@ -148,15 +187,13 @@
 			// ログイン成功
 			now_id = submit_id;
 			now_token = data.token;
-			$("#create_user_result").html("");
-			$("#create_user_result").append(now_id+"でログインしました。");
+			update_alert("#create_user_result", "success", "", now_id + "でログインしました。")
 			window.localStorage.setItem('wwasave_id', submit_id);
 			window.localStorage.setItem('wwasave_token', data.token);
 			
 			show_save_list();
 		}).fail((xhr)=>{
 			// ログイン失敗
-			$("#create_user_result").html("");
 			let output_str = "";
 			switch(xhr.status){
 				case 400:
@@ -187,7 +224,7 @@
 					break;
 				
 			}
-			$("#create_user_result").append(output_str);
+			update_alert("#create_user_result", "danger", "Error", output_str);
 		});
 	});
 	// ユーザ新規作成
@@ -204,10 +241,8 @@
 		}).done((data)=>{
 			now_id = submit_id;
 			now_token = data.token;
-			$("#create_user_result").html("");
 			$("#create_user_result").append(now_id+"でログインしました。");
 		}).fail((xhr)=>{
-			$("#create_user_result").html("");
 			let output_str = "";
 			switch(xhr.status){
 				case 400:
@@ -236,17 +271,17 @@
 				default:
 					output_str = "予期せぬエラーが発生しています。";
 					break;
-				
 			}
-			$("#create_user_result").append(output_str);
+			update_alert("#create_user_result", "danger", "Error", output_str);
 		});
 	});
 	// ログアウト
 	$(document).on("click","#logout",()=>{
 		now_id = "";
 		now_token = "";
-		$("#create_user_result").html("");
-		$("#create_user_result").append("ログアウトしました。");
+		update_alert("#create_user_result", "success", "", "ログアウトしました");
+		change_logout();
+		$("#login_status").html("");
 		$("#save_list").html("");
 		window.localStorage.removeItem('wwasave_id');
 		window.localStorage.removeItem('wwasave_token');

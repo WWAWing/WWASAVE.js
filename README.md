@@ -23,6 +23,7 @@
 * MySQL
 
 ## 使い方
+1. Yarnを入れる
 1. /var/www/html上でgit cloneする
 1. /server/conf/を作成し、以下のサイトのdbconfig.phpを参考にDB接続情報を記述
 	1. http://qiita.com/zaburo/items/9b8aa05c975677669142
@@ -34,5 +35,15 @@
 mysql -u 'Your_user_id' -p < ./server/sql/savedata.sql
 mysql -u 'Your_user_id' -p < ./server/sql/user.sql
 ```
+1. フロントエンドのパッケージを入れるため以下のコマンドを入力
+```
+yarn
+yarn run webpack
+```
 1. /client/index.html にアクセス
 
+## 使い方(Docker)
+1. YarnとDockerを入れる
+2. `docker-compose.yml` のあるディレクトリで `docker-compose up -d` を実行
+3. フロントエンドのパッケージを入れるため上記のコマンド(3.)を入力
+4. `http://localhost/client/` にアクセス

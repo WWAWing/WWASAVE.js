@@ -1,0 +1,35 @@
+table.select{
+	background-color:transparent;
+}
+body{
+	background-image: url("./b011.jpg");
+}
+table{
+	background-color: white;
+}
+.red{
+	color: #ff0000;
+}
+.center_table{
+	text-align: center;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+#header {
+	background-color: #ffc080;
+}
+footer#copyright {
+	text-align: center;
+}
+#left_box{
+	float: left;
+	width: 25%;
+}
+#right_box{
+	float: rigth;
+}
+
+.is_hidden {
+	display: none!important;
+}
